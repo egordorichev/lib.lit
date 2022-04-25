@@ -5,3 +5,11 @@ MakeFile
 CMakeCa*
 .idea
 test
+Makefile
+CMakeFiles
+cmake_install.txt
+install_manifest.txt
+*.cbp
+Testing
+*.so
+cmake_install.cmake

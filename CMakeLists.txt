@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.16)
 project(lib C)
 set(CMAKE_C_STANDARD 99)
 
@@ -7,10 +7,11 @@ find_package(Lit REQUIRED)
 
 include_directories(include/ ${LIT_INCLUDE_DIRS})
 
-add_library(lib src/lib.c include/lib.h)
+add_library(lib SHARED src/lib.c include/lib.h)
 target_link_libraries(lib ${LIT_LIBRARIES} m)
 
-set_target_properties(lib PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/dist")
+set_target_properties(lib PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/dist")
+install(TARGETS lib DESTINATION lib)
 
 add_executable(test src/test.c)
 set_target_properties(test PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
