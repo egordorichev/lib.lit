@@ -1,14 +1,27 @@
-find_package(PkgConfig)
-pkg_check_modules(PC_LIT QUIET lit)
-set(LIT_DEFINITIONS ${PC_LIT_CFLAGS_OTHER})
+find_path(LIT_INCLUDE_DIR lit/lit.h
+	$ENV{LIT_DIR}/include
+	$ENV{LIT_DIR}
+	/usr/local/include
+	/usr/include
+)
 
-find_path(LIT_INCLUDE_DIR lit/lit.h HINTS ${PC_LIT_INCLUDEDIR} ${PC_LIT_INCLUDE_DIRS} PATH_SUFFIXES liblit)
-find_library(LIT_LIBRARY NAMES lit liblit HINTS ${PC_LIT_LIBDIR} ${PC_LIT_LIBRARY_DIRS})
+find_library(LIT_LIBRARIES
+	NAMES liblit lit
+	PATHS
+	$ENV{LIT_DIR}/lib
+	$ENV{LIT_DIR}
+	/usr/local/lib
+	/usr/lib
+)
 
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(Lit  DEFAULT_MSG LIT_LIBRARY LIT_INCLUDE_DIR)
+set(LIT_FOUND "NO")
 
-mark_as_advanced(LIT_INCLUDE_DIR LIT_LIBRARY)
+if(LIT_LIBRARIES AND LIT_INCLUDE_DIR)
+	set(LIT_FOUND "YES")
 
-set(LIT_LIBRARIES ${LIT_LIBRARY})
-set(LIT_INCLUDE_DIRS ${LIT_INCLUDE_DIR}/lit/)
+	add_library(lit INTERFACE IMPORTED)
+	set_target_properties(lit PROPERTIES
+		INTERFACE_INCLUDE_DIRECTORIES "${LIT_INCLUDE_DIR}"
+		INTERFACE_LINK_LIBRARIES "${LIT_LIBRARIES}"
+	)
+endif()
