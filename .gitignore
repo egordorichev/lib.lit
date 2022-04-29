@@ -13,3 +13,4 @@ install_manifest.txt
 Testing
 *.so
 cmake_install.cmake
+lit_lib.c
